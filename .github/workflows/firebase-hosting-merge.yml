@@ -25,7 +25,6 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          node-version: '8'
           run_install: false 
           package_json_file: './admin_panel/package.json'
 
