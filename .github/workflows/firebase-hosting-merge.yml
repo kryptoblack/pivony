@@ -29,7 +29,7 @@ jobs:
           package_json_file: './admin_panel/package.json'
 
       - name: Install dependencies
-        run: pnpm run install
+        run: pnpm install
         working-directory: admin_panel
 
       - name: Build project
