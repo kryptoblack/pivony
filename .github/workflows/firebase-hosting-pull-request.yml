@@ -4,11 +4,6 @@
 name: Deploy to Firebase Hosting on PR
 'on': 
   workflow_dispatch:
-    inputs:
-      adminPanelChanges:
-        description: 'Run workflow without changes in admin_panel directory'
-        required: false
-        default: 'false'
   pull_request:
     paths:
       - 'admin_panel/**'
