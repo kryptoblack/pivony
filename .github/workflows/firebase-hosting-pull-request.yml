@@ -30,7 +30,7 @@ jobs:
         working-directory: admin_panel
 
       - name: Build project
-      - run: pnpm run build
+        run: pnpm run build
         working-directory: admin_panel
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
