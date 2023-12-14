@@ -1,0 +1,9 @@
+h1 {
+  font-weight: bold;
+  font-size: 8rem;
+  padding: 1rem;
+}
+
+.flex {
+  display: block;
+}

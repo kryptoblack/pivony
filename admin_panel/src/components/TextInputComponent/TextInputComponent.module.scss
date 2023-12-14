@@ -1,0 +1,42 @@
+@import "src/styles/fonts.scss";
+@import "src/styles/colors.scss";
+
+.textInputComponent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .label {
+    @include body-semibold;
+    width: fit-content;
+  }
+
+  .renderComponent {
+    .input {
+      @include body-sm;
+      border: 1px solid $gray;
+      background: $gray;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      border: 1px solid $darkgray;
+      width: 100%;
+      box-sizing: border-box;
+
+      &:disabled {
+        background: $darkgray;
+      }
+
+      &:focus {
+        outline: none;
+        border: 1px solid $purple;
+      }
+    }
+
+    .fieldError {
+      @include body-sm;
+      margin: 0;
+      color: $red;
+      height: 1rem;
+    }
+  }
+}

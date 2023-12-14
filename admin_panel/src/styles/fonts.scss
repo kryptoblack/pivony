@@ -1,0 +1,34 @@
+@mixin heading {
+  font-family: "Overpass";
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+}
+
+@mixin sub-heading {
+  font-family: "Overpass";
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@mixin body {
+  font-family: "Noto Sans";
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@mixin body-semibold {
+  font-family: "Noto Sans";
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+@mixin body-sm {
+  font-family: "Noto Sans";
+  font-weight: 200;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
+}

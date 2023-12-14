@@ -1,0 +1,50 @@
+@import "src/styles/colors.scss";
+@import "src/styles/fonts.scss";
+@import "src/styles/utils.scss";
+
+.codeContainer {
+  position: relative;
+  width: calc(100vw - 2rem);
+
+  @include respond-to(desktop) {
+    margin: 0;
+    width: 30rem;
+  }
+
+  pre {
+    margin: 0;
+  }
+
+  .copyIconContainer {
+    position: absolute;
+    padding: 0.5rem;
+    background: $lightgray;
+    opacity: 0;
+    top: 1rem;
+    right: 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+
+    svg {
+      height: 100%;
+      width: 100%;
+      color: black;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &:hover {
+    .copyIconNotClicked {
+      opacity: 0.8;
+      transition: opacity 0.2s ease-in;
+    }
+  }
+
+  .copyIconClicked {
+    opacity: 1;
+    transition: opacity 0.2s ease-out;
+  }
+}

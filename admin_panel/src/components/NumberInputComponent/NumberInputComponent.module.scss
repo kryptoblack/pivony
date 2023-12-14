@@ -1,0 +1,70 @@
+@import "src/styles/fonts.scss";
+@import "src/styles/colors.scss";
+
+.numberInputComponent {
+  @include body;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .label {
+    @include body-semibold;
+    width: fit-content;
+  }
+
+  .renderComponent {
+    .inputContainer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .inputArrowContainer {
+        display: flex;
+        align-items: center;
+        background: $gray;
+        width: fit-content;
+        border: 1px solid $darkgray;
+        border: 1px solid transparent;
+
+        .icon {
+          padding: 0.5rem;
+          cursor: pointer;
+          user-select: none;
+
+          &:active {
+            background: $lightpurple;
+          }
+
+          svg {
+            width: 1rem;
+          }
+        }
+
+        &:focus-within {
+          outline: none;
+          border: 1px solid $purple;
+        }
+
+        input {
+          background: $gray;
+          outline: none;
+          padding: 0.5rem;
+          text-align: center;
+          width: 2rem;
+          border: 1px solid transparent;
+        }
+      }
+
+      .adornments {
+        @include body-sm;
+      }
+    }
+
+    .fieldError {
+      @include body-sm;
+      margin: 0;
+      color: $red;
+      height: 1rem;
+    }
+  }
+}
