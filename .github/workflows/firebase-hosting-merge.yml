@@ -21,18 +21,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-        working-directory: admin_panel
 
-      - name: Install pnpm
+      - name: Install pnpm and dependencies
         uses: pnpm/action-setup@v2
         with:
           node-version: '8'
-        working-directory: admin_panel
-
-
-      - name: Install packages
-        run: pnpm install
-        working-directory: admin_panel
+          run_install: true
+          cwd: admin_panel
 
       - name: Build project
         run: pnpm run build
