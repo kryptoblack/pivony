@@ -56,9 +56,6 @@ export default function App() {
 
     const userId: string = localStorage.getItem("userId") || "";
     if (!userId) {
-      console.error(
-        "User Id was deleted after updating the configuration. Please refresh the page.",
-      );
       setError("root", {
         type: "manual",
         message:
@@ -66,34 +63,38 @@ export default function App() {
       });
     }
 
+    // TODO: Get a better minifier
     const minify = (code: string) => {
       return code.replace(/\n[ ]*/g, "");
     };
 
     return [
-      minify(`<!-- Copy and paste this code snippet in your website's <head> tag -->
-            <script 
-              type="module" 
-              crossorigin="anonymous" 
-              referrerpolicy="no-referrer" 
-              src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-DbWcA9fp.js?alt=media&token=e0c60cca-3f87-4c8f-9889-f46186900cd8">
-            </script>
-            <link 
-              rel="stylesheet" 
-              crossorigin="anonymous" 
-              referrerpolicy="no-referrer" 
-              href="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-1h9jF6HC.css?alt=media&token=aaae0cdb-b4e9-4b0b-b3ce-fb7ceb28bf14"
-            >`),
-      minify(`<!-- Copy and paste this code snippet below website's </body> tag -->
-            <script>
-              localStorage.removeItem("pivonyDocumentId");
-              const existingElement=document.getElementById("pivony");
-              if (!existingElement) {
-                  const e = Object.assign(document.createElement("div"), {id:"pivony"});
-                  document.body.appendChild(e)
-              }
-              localStorage.setItem("pivonyDocumentId", "${userId}");
-            </script>`),
+      minify(`
+        <!-- Copy and paste this code snippet in your website's <head> tag -->
+        <script 
+          type="module" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" 
+          src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-BcVhFdCQ.js?alt=media&token=47181bb3-f906-499c-99d2-464fcd231fb3"
+        ></script>
+        <link 
+          rel="stylesheet" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" 
+          href="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-1h9jF6HC.css?alt=media&token=aaae0cdb-b4e9-4b0b-b3ce-fb7ceb28bf14"
+        >
+      `),
+      minify(`
+        <!-- Copy and paste this code snippet below website's </body> tag -->
+        <script>
+          document.body.onload = () => {
+            localStorage.removeItem("pivonyDocumentId");
+            localStorage.setItem("pivonyDocumentId", "${userId}");
+            const ee = document.getElementById("pivony");
+            if (!ee) document.body.appendChild(Object.assign(document.createElement("div"), {id: "pivony"}));
+          }
+        </script>
+      `),
     ];
   }, [localStorage.getItem("userId")]);
 
@@ -317,8 +318,8 @@ export default function App() {
               : styles.hide,
           )}
         >
-          {codeSnippet.map((code) => (
-            <CodeSnippet codeSnippet={code} />
+          {codeSnippet.map((code, index) => (
+            <CodeSnippet key={index} codeSnippet={code} />
           ))}
         </div>
         {/* )} */}

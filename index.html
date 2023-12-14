@@ -6,20 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Website A</title>
 
-    <!-- Copy and paste this code snippet in your website's <head> tag -->
+    <!-- favicon -->
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+
     <script type="module" crossorigin="anonymous" referrerpolicy="no-referrer"
         src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-DbWcA9fp.js?alt=media&token=e0c60cca-3f87-4c8f-9889-f46186900cd8"></script>
     <link rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer"
         href="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-1h9jF6HC.css?alt=media&token=aaae0cdb-b4e9-4b0b-b3ce-fb7ceb28bf14">
-    <link rel="stylesheet" href="index.css" />
+
 </head>
+
+<style>
+    body {
+        margin: 1rem;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+</style>
 
 <body>
     <h1>Website A</h1>
-    <div id="pivony"></div>
 </body>
 
 <!-- Copy and paste this code snippet below website's </body> tag -->
-<script>localStorage.removeItem("pivonyDocumentId"); const existingElement = document.getElementById("pivony"); if (!existingElement) {const e = Object.assign(document.createElement("div"), {id: "pivony"}); document.body.appendChild(e)} localStorage.setItem("pivonyDocumentId", "lq51w85o");</script>
+<script>document.body.onload = () => {localStorage.removeItem("pivonyDocumentId"); localStorage.setItem("pivonyDocumentId", "default"); const ee = document.getElementById("pivony"); if (!ee) document.body.appendChild(Object.assign(document.createElement("div"), {id: "pivony"}));}</script>
 
 </html>
