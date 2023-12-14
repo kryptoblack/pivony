@@ -4,7 +4,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { firestore } from "./utils/firebase";
 import classNames from "classnames";
-// import { minify } from "html-minifier";
 
 import styles from "./App.module.scss";
 import NumberInputComponent from "./components/NumberInputComponent/NumberInputComponent";
@@ -71,29 +70,25 @@ export default function App() {
     return [
       minify(`
         <!-- Copy and paste this code snippet in your website's <head> tag -->
-        <script 
-          type="module" 
-          crossorigin="anonymous" 
-          referrerpolicy="no-referrer" 
-          src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-BcVhFdCQ.js?alt=media&token=47181bb3-f906-499c-99d2-464fcd231fb3"
-        ></script>
         <link 
           rel="stylesheet" 
           crossorigin="anonymous" 
           referrerpolicy="no-referrer" 
-          href="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-1h9jF6HC.css?alt=media&token=aaae0cdb-b4e9-4b0b-b3ce-fb7ceb28bf14"
+          href="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-1h9jF6HC.css?alt=media&token=0d15530d-a9b0-4ff2-a257-973ea0b367fe"
         >
       `),
       minify(`
-        <!-- Copy and paste this code snippet below website's </body> tag -->
+        <!-- Copy and paste this code snippet just before website's </body> tag -->
         <script>
-          document.body.onload = () => {
-            localStorage.removeItem("pivonyDocumentId");
-            localStorage.setItem("pivonyDocumentId", "${userId}");
-            const ee = document.getElementById("pivony");
-            if (!ee) document.body.appendChild(Object.assign(document.createElement("div"), {id: "pivony"}));
-          }
+          localStorage.removeItem("pivonyDocumentId");
+          localStorage.setItem("pivonyDocumentId", "${userId}");
         </script>
+        <script 
+          type="module" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" 
+          src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-EyoEURki.js?alt=media&token=a526f290-2c26-45e3-80b3-d5ab60880500"
+        ></script>
       `),
     ];
   }, [localStorage.getItem("userId")]);
