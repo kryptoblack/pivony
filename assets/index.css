@@ -1,0 +1,54 @@
+.rootContainer-pny {
+  display: flex;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.rootContainer-pny .inputContainer-pny {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rootContainer-pny .inputContainer-pny .label-pny {
+  display: block;
+  color: #333;
+  align-self: center;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.rootContainer-pny .inputContainer-pny .input-pny {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.rootContainer-pny .saveButton-pny {
+  background-color: #4caf50;
+  color: #fff;
+  width: 8rem;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.rootContainer-pny .saveButton-pny:hover {
+  background-color: #45a049;
+}
+
+.rootContainer-pny .resetButton-pny {
+  background-color: gray;
+  color: #fff;
+  width: 8rem;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.rootContainer-pny .resetButton-pny:hover {
+  background-color: gray;
+}
