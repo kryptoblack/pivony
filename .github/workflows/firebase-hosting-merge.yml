@@ -3,6 +3,12 @@
 
 name: Deploy to Firebase Hosting on merge
 'on':
+  workflow_dispatch:
+    inputs:
+      adminPanelChanges:
+        description: 'Run workflow without changes in admin_panel directory'
+        required: false
+        default: 'false'
   push:
     branches:
       - main
