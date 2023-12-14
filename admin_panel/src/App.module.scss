@@ -18,6 +18,30 @@
     padding: 0 2rem;
   }
 
+  .loader {
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    width: 5rem;
+    height: 5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $darkpurple;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      animation: spin 1s ease-in-out infinite;
+    }
+  }
   .contentContainer {
     display: flex;
     flex-direction: column;
@@ -61,11 +85,16 @@
       }
 
       .formFooter {
+        @include body-semibold;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         border-top: 1px solid black;
         padding-top: 1rem;
         gap: 1rem;
+
+        .formFooterText {
+          align-self: center;
+        }
 
         .submitButton {
           @include body;

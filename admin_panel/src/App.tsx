@@ -30,6 +30,7 @@ interface IFormInput {
 
 export default function App() {
   const [dataInDb, setDataInDb] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(true);
   const [showCodeSnippet, setShowCodeSnippet] = useState<boolean>(false);
   const {
     control,
@@ -143,7 +144,10 @@ export default function App() {
     }
 
     // This is done to prevent the document from being fetched multiple times
-    if (dataInDbRef.current) return;
+    if (dataInDbRef.current) {
+      setIsLoaded(false);
+      return;
+    }
 
     // Get the document if it exists
     const documentRef = doc(firestore, "popup_configuration", userId);
@@ -151,6 +155,7 @@ export default function App() {
       .then((doc) => {
         console.debug("Document data:", doc.data());
         const data = doc.data() as IPopupConfigurationAPI;
+        setIsLoaded(false);
 
         // Set the values of the form
         if (data) {
@@ -171,6 +176,15 @@ export default function App() {
         console.error("Error getting document:", error);
       });
   }, []);
+
+  if (isLoaded)
+    return (
+      <div className={styles.appRoot}>
+        <div className={styles.loader}>
+          <AiOutlineLoading3Quarters />
+        </div>
+      </div>
+    );
 
   return (
     <div className={styles.appRoot}>
@@ -286,25 +300,29 @@ export default function App() {
 
           {/* Submit Button */}
           <div className={styles.formFooter}>
-            {isSubmitting ? (
-              <div className={styles.formLoading}>
-                <AiOutlineLoading3Quarters />
-              </div>
-            ) : null}
-            <input
-              className={classNames(
-                styles.submitButton,
-                isSubmitting ? styles.disabled : null,
-              )}
-              type="submit"
-              value="Save"
-              disabled={isSubmitting}
-            />
+            <div className={styles.formFooterText}>
+              User ID: <span>{localStorage.getItem("userId") ?? "-"}</span>
+            </div>
+            <div>
+              {isSubmitting ? (
+                <div className={styles.formLoading}>
+                  <AiOutlineLoading3Quarters />
+                </div>
+              ) : null}
+              <input
+                className={classNames(
+                  styles.submitButton,
+                  isSubmitting ? styles.disabled : null,
+                )}
+                type="submit"
+                value="Save"
+                disabled={isSubmitting}
+              />
+            </div>
           </div>
         </form>
 
         {/* Animation */}
-        {/* {localStorage.getItem("userId") && dataInDb && ( */}
         <div
           className={classNames(
             styles.animationContainer,
@@ -317,7 +335,6 @@ export default function App() {
             <CodeSnippet key={index} codeSnippet={code} />
           ))}
         </div>
-        {/* )} */}
       </div>
     </div>
   );
