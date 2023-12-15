@@ -88,7 +88,7 @@ export default function App() {
           type="module" 
           crossorigin="anonymous" 
           referrerpolicy="no-referrer" 
-          src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-EyoEURki.js?alt=media&token=a526f290-2c26-45e3-80b3-d5ab60880500"
+          src="https://firebasestorage.googleapis.com/v0/b/pivony-case-study.appspot.com/o/index-KnezMnPe.js?alt=media&token=e2f067f4-0917-4278-b859-55a9b8804497"
         ></script>
       `),
     ];
@@ -209,6 +209,10 @@ export default function App() {
                   value: 3,
                   message: "Name should be at least 3 characters long",
                 },
+                maxLength: {
+                  value: 64,
+                  message: "Title should be at most 64 characters long",
+                },
               }}
             />
 
@@ -224,7 +228,11 @@ export default function App() {
                 type: "string",
                 minLength: {
                   value: 3,
-                  message: "Name should be at least 3 characters long",
+                  message: "Title should be at least 3 characters long",
+                },
+                maxLength: {
+                  value: 64,
+                  message: "Title should be at most 64 characters long",
                 },
               }}
             />
@@ -239,8 +247,12 @@ export default function App() {
               rules={{
                 type: "string",
                 minLength: {
-                  value: 7,
-                  message: "Placeholder should be at least 7 characters long",
+                  value: 3,
+                  message: "Placeholder should be at least 3 characters long",
+                },
+                maxLength: {
+                  value: 128,
+                  message: "Placeholder should be at most 128 characters long",
                 },
               }}
             />
@@ -254,6 +266,10 @@ export default function App() {
                 min: {
                   value: 0,
                   message: "Wait time cannot be lower than zero",
+                },
+                max: {
+                  value: 86400,
+                  message: "Wait time cannot be greater than 86400",
                 },
                 required: "Wait time is Required",
               }}
@@ -286,6 +302,10 @@ export default function App() {
                   value: 1,
                   message: "Display Frequency should be at least 1",
                 },
+                max: {
+                  value: 1440,
+                  message: "Display Frequency should be at most 1440",
+                },
               }}
               adoronments="minutes"
             />
@@ -303,7 +323,7 @@ export default function App() {
             <div className={styles.formFooterText}>
               User ID: <span>{localStorage.getItem("userId") ?? "-"}</span>
             </div>
-            <div>
+            <div className={styles.formFooterButton}>
               {isSubmitting ? (
                 <div className={styles.formLoading}>
                   <AiOutlineLoading3Quarters />

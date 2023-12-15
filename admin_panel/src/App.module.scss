@@ -1,6 +1,7 @@
 @import "src/styles/fonts.scss";
 @import "src/styles/colors.scss";
 @import "src/styles/utils.scss";
+@import "src/styles/animations.scss";
 
 .appRoot {
   display: flex;
@@ -19,15 +20,6 @@
   }
 
   .loader {
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
     width: 5rem;
     height: 5rem;
     position: absolute;
@@ -96,50 +88,46 @@
           align-self: center;
         }
 
-        .submitButton {
-          @include body;
-          padding: 0.5rem 1rem;
-          background: $purple;
-          color: $white;
-          outline: none;
-          border: none;
-          border-radius: 0.75rem;
-          cursor: pointer;
-
-          &:hover,
-          &:focus {
-            background: $darkpurple;
-          }
-        }
-
-        .disabled {
-          background: $darkgray;
-          cursor: not-allowed;
-
-          &:hover,
-          &:focus {
-            background: $darkgray;
-          }
-        }
-
-        .formLoading {
-          @keyframes spin {
-            0% {
-              transform: rotate(0deg);
-            }
-            100% {
-              transform: rotate(360deg);
-            }
-          }
-
+        .formFooterButton {
           display: flex;
-          align-items: center;
-          animation: spin 1s linear infinite;
+          gap: 1rem;
 
-          svg {
-            height: 1.5rem;
-            width: 1.5rem;
-            color: $darkpurple;
+          .submitButton {
+            @include body;
+            padding: 0.5rem 1rem;
+            background: $purple;
+            color: $white;
+            outline: none;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+              background: $darkpurple;
+            }
+          }
+
+          .disabled {
+            background: $darkgray;
+            cursor: not-allowed;
+
+            &:hover,
+            &:focus {
+              background: $darkgray;
+            }
+          }
+
+          .formLoading {
+            display: flex;
+            align-items: center;
+            animation: spin 1s linear infinite;
+
+            svg {
+              height: 1.5rem;
+              width: 1.5rem;
+              color: $darkpurple;
+            }
           }
         }
       }
@@ -164,9 +152,11 @@
       @keyframes slideAnimation {
         0% {
           transform: translateY(-42rem);
+          opacity: 0;
         }
         100% {
           transform: translateY(0);
+          opacity: 1;
         }
       }
 
@@ -174,9 +164,11 @@
         @keyframes slideAnimation {
           0% {
             transform: translateX(-34rem);
+            opacity: 0;
           }
           100% {
             transform: translateX(0);
+            opacity: 1;
           }
         }
       }
@@ -189,6 +181,7 @@
 
       @include respond-to(desktop) {
         display: flex;
+        opacity: 0;
       }
     }
   }

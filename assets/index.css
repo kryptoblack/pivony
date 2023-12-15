@@ -40,7 +40,7 @@
 }
 
 .rootContainer-pny .resetButton-pny {
-  background-color: gray;
+  background-color: #a9a9a9;
   color: #fff;
   width: 8rem;
   padding: 10px;
@@ -50,5 +50,5 @@
 }
 
 .rootContainer-pny .resetButton-pny:hover {
-  background-color: gray;
+  background-color: #808080;
 }

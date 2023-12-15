@@ -1,17 +1,21 @@
-window.addEventListener("load", function() {
-    document.getElementById("save").addEventListener("click", function() {
-        const e = document.getElementById("userIdInput");
-        localStorage.setItem("pivonyDocumentId", e.value);
-        console.log(e.placeholder);
-        e.placeholder = e.value;
-        e.value = "";
-        location.reload();
-    });
+function reset() {
+  localStorage.removeItem("pivonyDocumentId");
+  sessionStorage.removeItem("displayCount");
+  location.reload();
+}
 
-    document.getElementById("reset").addEventListener("click", function() {
-        sessionStorage.getItem("pivonyDocumentId", "");
-    });
+window.addEventListener("load", function () {
+  document.getElementById("save").addEventListener("click", function () {
+    reset();
 
     const e = document.getElementById("userIdInput");
+    localStorage.setItem("pivonyDocumentId", e.value);
+    location.reload();
+  });
+
+  document.getElementById("reset").addEventListener("click", reset);
+
+  const e = document.getElementById("userIdInput");
+  if (localStorage.getItem("pivonyDocumentId"))
     e.placeholder = localStorage.getItem("pivonyDocumentId");
 });

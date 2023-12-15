@@ -43,9 +43,10 @@ interface IState {
   rating: number;
   review: string;
   show: boolean;
-  popupTimeout: null;
-  popupInterval: null;
+  popupTimeout: number | null;
   firstLoad: boolean;
+  landedAt: number;
+  lastShownAt: number;
 }
 
 export default function App() {
@@ -55,8 +56,9 @@ export default function App() {
     review: "",
     show: false,
     popupTimeout: null,
-    popupInterval: null,
     firstLoad: true,
+    landedAt: 0,
+    lastShownAt: 0,
   };
 
   const [step, setStep] = useState<Step>(defaultState.step);
@@ -67,9 +69,10 @@ export default function App() {
   const [popupTimeout, setPopupTimeout] = useState<number | null>(
     defaultState.popupTimeout,
   );
-  // const [popupInterval, setPopupInterval] = useState<number>(
-  // defaultState.popupInterval,
-  // );
+  const [landedAt, setLandedAt] = useState<number>(defaultState.landedAt);
+  const [lastShownAt, setLastShownAt] = useState<number>(
+    defaultState.lastShownAt,
+  );
   const [popupConfiguration, setPopupConfiguration] =
     useState<IPopupConfiguration>();
 
@@ -77,12 +80,16 @@ export default function App() {
   const showRef = useRef(show);
   const firstLoadRef = useRef(firstLoad);
   const popupTimeoutRef = useRef(popupTimeout);
+  const lastShownAtRef = useRef(lastShownAt);
+  const landedAtRef = useRef(landedAt);
 
   useEffect(() => {
     showRef.current = show;
     firstLoadRef.current = firstLoad;
     popupTimeoutRef.current = popupTimeout;
-  }, [show, firstLoad, popupTimeout]);
+    lastShownAtRef.current = lastShownAt;
+    landedAtRef.current = landedAt;
+  }, [show, firstLoad, popupTimeout, landedAt, lastShownAt]);
 
   const showPopup = (popupConfiguration: IPopupConfiguration) => {
     /**
@@ -95,32 +102,35 @@ export default function App() {
      */
 
     const displayCount = Number(sessionStorage.getItem("displayCount"));
-    console.debug(
-      "showPopup",
-      showRef.current,
-      displayCount,
-      popupConfiguration,
-    );
+    console.debug("Deciding to show popup");
 
     // If the popup is already shown, don't show it again or the display is
     // already maxed out, don't show it again
     if (
       showRef.current ||
       (popupConfiguration && displayCount >= popupConfiguration.maxDisplay)
-    )
+    ) {
+      console.debug(
+        `Don't show popup because ${
+          showRef.current ? "it is already shown" : "display is maxed out"
+        }`,
+      );
       return;
+    }
 
     // Reset state
     setStep(defaultState.step);
     setRating(defaultState.rating);
     setReview(defaultState.review);
 
-    console.debug("showPopup later");
-
     // Increment the display count
     sessionStorage.setItem("displayCount", String(displayCount + 1));
 
+    // Set the firstLoad to false after the first load
+    if (firstLoadRef.current) setFirstLoad(false);
+
     // Show the popup
+    setLastShownAt(Date.now());
     setShow(true);
   };
 
@@ -140,48 +150,76 @@ export default function App() {
        */
 
       setPopupConfiguration(popupConfiguration);
-      console.debug(
-        "applyPopupConfiguration",
-        popupConfiguration,
-        firstLoadRef.current,
-      );
 
       // initialize the display count
       const displayCount = Number(sessionStorage.getItem("displayCount"));
       if (!displayCount) sessionStorage.setItem("displayCount", "0");
 
-      // If the popup was shown in the past use the display frequency as delay
-      // else use the wait time as delay. This is to done to handle the case when
-      // the popup configuration is updated.
+      // The below firstLoad logic handles the following cases:
       //
-      // The firstLoad logic is used as it also handles the case when the page is
-      // refreshed.
-      const delay = firstLoadRef.current
+      // 1. First time the popup is shown (wait time is used)
+      // 2. Page is refreshed (wait time is used)
+      // 3. Session is over i.e. Tab / Browser is closed (wait time is used)
+      // 4. Popup configuration is updated (display frequency is used)
+
+      // First we check if we want to use wait time or display frequency as delay
+      const newDelay = firstLoadRef.current
         ? popupConfiguration.waitTime * 1000
         : popupConfiguration.displayFrequency * 60000;
 
-      if (firstLoadRef.current) setFirstLoad(false);
+      // If the the popup is shown for the first time, then we need to
+      // calculate the delay based on the time elapsed since the last
+      // timer was triggered else we use the time at which the user landed
+      // on the page.
+      const initialTime = firstLoadRef.current
+        ? landedAtRef.current
+        : lastShownAtRef.current;
 
-      console.debug("popupTimeout", Boolean(popupTimeoutRef.current), delay);
-      if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
-      setPopupTimeout(
-        setTimeout(() => {
-          /**
-           * This function is used to show the popup after x seconds.
-           */
-
-          showPopup(popupConfiguration);
-        }, delay),
+      // The delay is the difference between new delay and the time
+      // elapsed since the last timer was triggered or the time at which
+      // the user landed on the page (initialTime - currentTime).
+      //
+      // In this way we include the time elapsed till the update event to
+      // display the popup in a predictable manner.
+      //
+      // For e.g. If the timer scheduled or landing time is 10:00 and the
+      // popup is scheduled to show at 10:05. At 10:03, the configuration
+      // was updated increasing the Display Frequency from 5 minutes to
+      // 10 minutes. The popup should be shown at 10:10
+      // (10 mins - (10:00 - 10:03)) instead of 10:13 (10:03 + 10 mins).
+      const currentTime = Date.now();
+      const delay = newDelay - (currentTime - initialTime);
+      console.debug(
+        "Amount of time passed between user landing on page or last shown popup and update event",
+        (currentTime - initialTime) / 1000,
+        "seconds",
       );
+      console.debug("Scheduling popup to show after", delay / 1000, "seconds");
+
+      // Clear popupTimeout
+      if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
+
+      // If the delay is less than or equal to 0, it means that the popup
+      // should be shown immediately else schedule the popup to be shown
+      // after <delay> seconds.
+      if (delay <= 0) {
+        showPopup(popupConfiguration);
+      } else {
+        setPopupTimeout(
+          setTimeout(() => {
+            showPopup(popupConfiguration);
+          }, delay),
+        );
+      }
     };
 
-    console.debug("in init useEffect");
     function init() {
-      console.debug("init 1");
       const pivonyDocumentId = localStorage.getItem("pivonyDocumentId");
       if (!pivonyDocumentId) return;
 
-      console.debug("init 2");
+      console.debug("User Landed on Page at", new Date(Date.now()));
+      setLandedAt(Date.now());
+
       const collectionRef = collection(firestore, "popup_configuration");
       const queryRef = query(
         collectionRef,
@@ -190,7 +228,7 @@ export default function App() {
 
       // There will be only one document since we are querying by documentId
       return onSnapshot(queryRef, (snapshot) => {
-        console.debug("update");
+        console.debug("Update recieved from Firebase");
         snapshot.docChanges().forEach((change) => {
           const data = change.doc.data() as IPopupConfigurationResponse;
           const config: IPopupConfiguration = {
@@ -201,7 +239,7 @@ export default function App() {
             maxDisplay: data.max_display,
             displayFrequency: data.display_frequency,
           };
-          console.debug("change", change, data, config);
+          console.debug("Updated Config", config);
           if (change.type === "added") {
             applyPopupConfiguration(config);
           } else if (change.type === "modified") {
@@ -220,7 +258,6 @@ export default function App() {
     return () => {
       unsubscribe && unsubscribe();
       popupTimeoutRef.current && clearTimeout(popupTimeoutRef.current);
-      // clearInterval(popupInterval);
     };
   }, []);
 
@@ -232,6 +269,7 @@ export default function App() {
     const body = {
       rating: rating,
       review: review,
+      configuration_id: localStorage.getItem("pivonyDocumentId"),
     };
 
     push(ref(db, "answers"), body);
@@ -308,6 +346,12 @@ export default function App() {
                     sendData();
 
                     // TODO: Shift this to close button
+                    console.debug(
+                      "Scheduled popup to show after",
+                      60000 / 1000,
+                      "seconds",
+                    );
+
                     if (popupTimeout) clearTimeout(popupTimeout);
                     setPopupTimeout(
                       setTimeout(() => {
@@ -315,12 +359,6 @@ export default function App() {
                          * This function is used to show the popup after x minutes.
                          * This is used when the user submits the review.
                          */
-
-                        console.debug(
-                          "inside setTimeout displayFrequency",
-                          show,
-                          popupConfiguration.maxDisplay,
-                        );
 
                         showPopup(popupConfiguration);
                       }, popupConfiguration.displayFrequency * 60000),
