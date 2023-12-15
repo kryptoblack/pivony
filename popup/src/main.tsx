@@ -12,6 +12,6 @@ if (!document.getElementById(rootDivId)) {
 
 ReactDOM.createRoot(document.getElementById(rootDivId)!).render(
   <React.StrictMode>
-    <App />,
+    <App />
   </React.StrictMode>,
 );
