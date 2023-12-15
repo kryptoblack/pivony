@@ -266,10 +266,12 @@ export default function App() {
      * This function is used to send the data to the backend.
      */
 
+    console.debug("Sending data to backend");
     const body = {
       rating: rating,
       review: review,
       configuration_id: localStorage.getItem("pivonyDocumentId"),
+      configuration: popupConfiguration,
     };
 
     push(ref(db, "answers"), body);
